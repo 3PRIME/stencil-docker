@@ -28,6 +28,10 @@ if [ "$MOUNT_FS" != 'fuse.grpcfuse' ]; then
   groupadd --gid ${DOCKER_GID} node
   useradd --gid node --no-log-init --home-dir /home/node --shell /bin/bash --uid ${DOCKER_UID} node
 
+  # Create the directory if it doesn't exist
+  mkdir -p /home/node/.config
+
+  # Change ownership of the directory
   chown -R node:node /home/node/.config
 fi
 
@@ -38,12 +42,11 @@ if [ "${1:-}" = "stencil" ]; then
   exec sudo -u node /home/node/.npm-global/bin/stencil "$@"
 fi
 
-
 if [ "${1:-}" = "ajv" ]; then
   shift
   exec sudo -u node /home/node/.npm-global/bin/ajv "$@"
 fi
 
-
 exec sudo -u node "$@"
+
 
